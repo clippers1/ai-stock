@@ -1,0 +1,49 @@
+/* 应用全局样式 */
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+
+/* 页面容器 */
+.page-container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-background);
+}
+
+/* 页面切换动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-container {
+  animation: fadeIn 0.3s ease;
+}
+
+/* 触摸优化 */
+@media (hover: none) and (pointer: coarse) {
+
+  .stock-card:hover,
+  .sector-chip:hover,
+  .nav-item:hover,
+  .suggestion-chip:hover {
+    background: inherit;
+    transform: none;
+  }
+
+  .stock-card:active,
+  .sector-chip:active,
+  .nav-item:active {
+    opacity: 0.8;
+  }
+}

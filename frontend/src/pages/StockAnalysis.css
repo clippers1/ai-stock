@@ -1,0 +1,274 @@
+/* 股票分析页面样式 */
+
+.stock-analysis-page {
+    padding-bottom: calc(var(--nav-height) + var(--space-lg));
+}
+
+/* 头部 */
+.analysis-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background: var(--color-background);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-button,
+.favorite-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    background: var(--color-background-elevated);
+    transition: all var(--transition-fast);
+}
+
+.back-button:hover,
+.favorite-button:hover {
+    background: var(--color-border);
+}
+
+.favorite-button.active {
+    color: var(--color-primary);
+}
+
+.stock-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* 内容 */
+.analysis-content {
+    padding: 0 var(--space-md);
+}
+
+/* 价格区域 */
+.price-section {
+    margin-bottom: var(--space-lg);
+}
+
+.company-name {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.price-main {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    margin-top: var(--space-xs);
+}
+
+.current-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.price-change {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.price-change.positive {
+    color: var(--color-success);
+}
+
+.price-change.negative {
+    color: var(--color-danger);
+}
+
+/* 图表区域 */
+.chart-section {
+    margin-bottom: var(--space-xl);
+}
+
+.chart-canvas {
+    width: 100%;
+    height: 200px;
+    border-radius: var(--radius-md);
+    background: var(--color-background-card);
+}
+
+.time-range-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.time-button {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: transparent;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+}
+
+.time-button:hover {
+    color: var(--color-text);
+    background: var(--color-background-elevated);
+}
+
+.time-button.active {
+    color: var(--color-background);
+    background: var(--color-primary);
+}
+
+/* 指标区域 */
+.metrics-section {
+    margin-bottom: var(--space-xl);
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--space-md);
+    background: var(--color-background-card);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.metric-value {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.metric-value.positive {
+    color: var(--color-success);
+}
+
+.metric-value.negative {
+    color: var(--color-danger);
+}
+
+/* AI分析区域 */
+.ai-section {
+    margin-bottom: var(--space-xl);
+}
+
+.ai-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.ai-header svg {
+    color: var(--color-cta);
+}
+
+.ai-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.ai-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+.ai-badge.buy {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--color-cta);
+}
+
+.ai-badge.hold {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--color-primary);
+}
+
+.ai-badge.sell {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger);
+}
+
+.ai-card {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: var(--color-background-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.ai-score-ring {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
+
+.score-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.score-bg {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 3;
+}
+
+.score-fill {
+    fill: none;
+    stroke: var(--color-cta);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-cta);
+}
+
+.ai-analysis {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+/* 空状态 */
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--space-xl);
+}

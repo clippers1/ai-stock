@@ -1,0 +1,278 @@
+/* AI对话页面样式 */
+
+.chat-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    padding-bottom: calc(var(--nav-height) + var(--safe-area-bottom));
+}
+
+/* 头部 */
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.chat-avatar {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-cta) 0%, #A78BFA 100%);
+    border-radius: var(--radius-md);
+    color: white;
+}
+
+.chat-info h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.chat-info .status {
+    font-size: 0.75rem;
+    color: var(--color-success);
+}
+
+/* 消息列表 */
+.messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+}
+
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.message {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 85%;
+}
+
+.user-message {
+    flex-direction: row-reverse;
+    align-self: flex-end;
+}
+
+.assistant-message {
+    align-self: flex-start;
+}
+
+.message-avatar {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--color-background-elevated);
+    color: var(--color-text-muted);
+}
+
+.assistant-message .message-avatar {
+    background: linear-gradient(135deg, var(--color-cta) 0%, #A78BFA 100%);
+    color: white;
+}
+
+.user-message .message-avatar {
+    background: var(--color-primary);
+    color: var(--color-background);
+}
+
+.message-content {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    position: relative;
+}
+
+.assistant-message .message-content {
+    background: var(--color-background-card);
+    border: 1px solid var(--color-border);
+    border-bottom-left-radius: 4px;
+}
+
+.user-message .message-content {
+    background: var(--color-cta);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-content p {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.message-time {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+    text-align: right;
+}
+
+.user-message .message-time {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* 输入状态 */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 4px 0;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: var(--color-text-muted);
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+
+    30% {
+        transform: translateY(-6px);
+        opacity: 1;
+    }
+}
+
+/* 快捷建议 */
+.suggestions-container {
+    padding: var(--space-sm) var(--space-md);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-background);
+}
+
+.suggestions-scroll {
+    display: flex;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    padding-bottom: var(--space-xs);
+    -webkit-overflow-scrolling: touch;
+}
+
+.suggestions-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.suggestion-chip {
+    flex-shrink: 0;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.8125rem;
+    color: var(--color-text);
+    background: var(--color-background-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.suggestion-chip:hover {
+    background: var(--color-border);
+    border-color: var(--color-primary);
+}
+
+/* 输入区域 */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
+}
+
+.input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--color-background-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0 var(--space-sm);
+    transition: border-color var(--transition-fast);
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--color-primary);
+}
+
+.chat-input {
+    flex: 1;
+    padding: var(--space-md);
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-size: 1rem;
+    outline: none;
+}
+
+.chat-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.mic-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+}
+
+.mic-button:hover {
+    color: var(--color-text);
+    background: var(--color-border);
+}
+
+.send-button {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-border);
+    color: var(--color-text-muted);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.send-button.active {
+    background: var(--color-cta);
+    color: white;
+}
+
+.send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
