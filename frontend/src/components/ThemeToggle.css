@@ -1,0 +1,53 @@
+/* 主题切换按钮样式 */
+
+.theme-toggle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: var(--color-background-elevated);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background: var(--color-border);
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.icon-wrapper {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal);
+}
+
+.icon-wrapper.show {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+.icon-wrapper.hide {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+
+/* 亮色主题下的特殊样式 */
+[data-theme="light"] .theme-toggle {
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+    box-shadow: var(--shadow-md);
+}

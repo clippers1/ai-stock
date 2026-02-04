@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Recommendations from './pages/Recommendations';
 import StockAnalysis from './pages/StockAnalysis';
 import AIChat from './pages/AIChat';
+import AIBacktest from './pages/AIBacktest';
 import BottomNav from './components/BottomNav';
 import './App.css';
 
@@ -28,6 +29,8 @@ export default function App() {
     switch (currentPage) {
       case 'recommendations':
         return <Recommendations onSelectStock={handleSelectStock} />;
+      case 'backtest':
+        return <AIBacktest onSelectStock={handleSelectStock} />;
       case 'analysis':
         return <StockAnalysis symbol={selectedStock} onBack={handleBackFromAnalysis} />;
       case 'chat':

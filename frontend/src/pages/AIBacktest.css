@@ -1,0 +1,365 @@
+/* AI回测页面样式 */
+
+.backtest-page {
+    padding-bottom: calc(var(--nav-height) + var(--space-lg));
+}
+
+/* 页面头部 */
+.backtest-page .page-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(to bottom, var(--color-background) 0%, var(--color-background) 70%, transparent 100%);
+    padding: var(--space-md) var(--space-md) var(--space-lg);
+}
+
+.backtest-page .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.backtest-page .page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header-subtitle {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.backtest-page .icon-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    background: var(--color-background-elevated);
+    transition: background var(--transition-fast);
+}
+
+.backtest-page .icon-button:hover {
+    background: var(--color-border);
+}
+
+/* 内容区域 */
+.backtest-page .page-content {
+    padding: 0 var(--space-md);
+}
+
+/* 统计摘要卡片 */
+.summary-section {
+    margin-bottom: var(--space-lg);
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.summary-profit {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.summary-winrate {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.summary-count {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.summary-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 4px;
+}
+
+.summary-value.positive {
+    color: var(--color-success);
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.summary-profit .summary-label svg {
+    color: var(--color-success);
+}
+
+/* 时间筛选 */
+.filter-section {
+    margin-bottom: var(--space-lg);
+}
+
+.time-filters {
+    display: flex;
+    gap: var(--space-sm);
+    background: var(--color-background-elevated);
+    padding: 4px;
+    border-radius: var(--radius-md);
+}
+
+.filter-tab {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: transparent;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.filter-tab:hover {
+    color: var(--color-text);
+}
+
+.filter-tab.active {
+    color: var(--color-background);
+    background: var(--color-primary);
+    font-weight: 600;
+}
+
+/* 回测记录列表 */
+.records-section {
+    margin-bottom: var(--space-xl);
+}
+
+.records-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.record-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-background-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.record-card:hover {
+    background: var(--color-border);
+    transform: translateY(-1px);
+}
+
+.record-card:active {
+    transform: scale(0.99);
+}
+
+/* 记录头部 */
+.record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.record-stock {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+}
+
+.record-stock .stock-symbol {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.record-stock .stock-name {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.profit-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+}
+
+.profit-badge.positive {
+    color: var(--color-success);
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.profit-badge.negative {
+    color: var(--color-danger);
+    background: rgba(239, 68, 68, 0.15);
+}
+
+/* 记录元信息 */
+.record-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.recommendation-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+}
+
+.label-buy {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--color-cta);
+}
+
+.label-hold {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--color-primary);
+}
+
+.label-sell {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger);
+}
+
+.record-date {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+/* 价格信息 */
+.record-prices {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+}
+
+.price-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.price-label {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+}
+
+.price-value {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.price-value.positive {
+    color: var(--color-success);
+}
+
+.price-value.negative {
+    color: var(--color-danger);
+}
+
+.price-arrow {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+/* 迷你趋势图 */
+.mini-chart {
+    height: 24px;
+    margin-top: var(--space-xs);
+}
+
+.mini-chart svg {
+    width: 100%;
+    height: 100%;
+}
+
+.mini-chart .chart-up polyline {
+    stroke: var(--color-success);
+}
+
+.mini-chart .chart-down polyline {
+    stroke: var(--color-danger);
+}
+
+/* 空状态 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-2xl);
+    color: var(--color-text-muted);
+}
+
+.empty-state svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+}
+
+/* 加载状态 - 复用 */
+.backtest-page .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    height: 50vh;
+    color: var(--color-text-muted);
+}
+
+.backtest-page .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

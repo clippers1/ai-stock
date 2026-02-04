@@ -1,10 +1,11 @@
 /* 
  * AI Stock Trading - 设计系统变量
  * 基于 MASTER.md 设计规范
+ * 支持深色/亮色主题切换
  */
 
 :root {
-  /* 颜色系统 */
+  /* ===== 深色主题（默认） ===== */
   --color-primary: #F59E0B;
   --color-secondary: #FBBF24;
   --color-cta: #8B5CF6;
@@ -14,8 +15,11 @@
   --color-text: #F8FAFC;
   --color-text-muted: #94A3B8;
   --color-text-secondary: #CBD5E1;
-  --color-success: #10B981;
-  --color-danger: #EF4444;
+  /* A股习惯：涨红跌绿 */
+  --color-success: #EF4444;
+  /* 上涨 - 红色 */
+  --color-danger: #10B981;
+  /* 下跌 - 绿色 */
   --color-warning: #F59E0B;
   --color-border: #334155;
 
@@ -33,7 +37,7 @@
   --radius-lg: 16px;
   --radius-full: 9999px;
 
-  /* 阴影 */
+  /* 阴影 - 深色主题 */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
@@ -46,6 +50,31 @@
   /* 安全区域 */
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --nav-height: 64px;
+}
+
+/* ===== 亮色主题 ===== */
+[data-theme="light"] {
+  --color-primary: #D97706;
+  --color-secondary: #F59E0B;
+  --color-cta: #7C3AED;
+  --color-background: #F8FAFC;
+  --color-background-elevated: #FFFFFF;
+  --color-background-card: #FFFFFF;
+  --color-text: #0F172A;
+  --color-text-muted: #64748B;
+  --color-text-secondary: #475569;
+  /* A股习惯：涨红跌绿 */
+  --color-success: #DC2626;
+  /* 上涨 - 深红色 */
+  --color-danger: #059669;
+  /* 下跌 - 深绿色 */
+  --color-warning: #D97706;
+  --color-border: #E2E8F0;
+
+  /* 阴影 - 亮色主题 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
 }
 
 /* 全局重置 */
@@ -112,7 +141,8 @@ button {
 }
 
 /* 输入框重置 */
-input, textarea {
+input,
+textarea {
   font-family: inherit;
   font-size: inherit;
 }

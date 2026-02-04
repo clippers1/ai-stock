@@ -16,22 +16,95 @@ MCP_TIMEOUT = 30.0
 
 
 class MCPClient:
-    """MCP客户端，用于调用akshare-one-mcp服务"""
+    """MCP客户端，用于调用akshare-one-mcp服务（Streamable HTTP模式）"""
     
     def __init__(self, server_url: str = MCP_SERVER_URL):
         self.server_url = server_url
         self._request_id = 0
+        self._session_id: Optional[str] = None
+        self._initialized = False
     
     def _next_id(self) -> int:
         self._request_id += 1
         return self._request_id
     
+    def _get_headers(self) -> dict:
+        """获取请求头"""
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream"
+        }
+        if self._session_id:
+            headers["Mcp-Session-Id"] = self._session_id
+        return headers
+    
+    async def _initialize_session(self) -> bool:
+        """初始化MCP会话"""
+        if self._initialized and self._session_id:
+            return True
+            
+        try:
+            async with httpx.AsyncClient(timeout=MCP_TIMEOUT) as client:
+                # 发送initialize请求
+                response = await client.post(
+                    self.server_url,
+                    headers=self._get_headers(),
+                    json={
+                        "jsonrpc": "2.0",
+                        "method": "initialize",
+                        "params": {
+                            "protocolVersion": "2024-11-05",
+                            "capabilities": {},
+                            "clientInfo": {
+                                "name": "ai-stock-client",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "id": self._next_id()
+                    }
+                )
+                
+                # 从响应头获取session ID
+                session_id = response.headers.get("Mcp-Session-Id")
+                if session_id:
+                    self._session_id = session_id
+                    print(f"[MCP] ✅ 获取会话ID: {session_id[:20]}...")
+                
+                if response.status_code == 200:
+                    self._initialized = True
+                    # 发送initialized通知
+                    await client.post(
+                        self.server_url,
+                        headers=self._get_headers(),
+                        json={
+                            "jsonrpc": "2.0",
+                            "method": "notifications/initialized"
+                        }
+                    )
+                    print("[MCP] ✅ 会话初始化成功")
+                    return True
+                else:
+                    logger.error(f"MCP初始化失败: {response.status_code}")
+                    print(f"[MCP] ❌ 初始化失败: {response.status_code}")
+                    return False
+                    
+        except Exception as e:
+            logger.error(f"MCP初始化异常: {e}")
+            print(f"[MCP] ❌ 初始化异常: {e}")
+            return False
+    
     async def call_tool(self, tool_name: str, arguments: dict) -> dict:
         """调用MCP工具"""
+        # 确保会话已初始化
+        if not self._initialized:
+            if not await self._initialize_session():
+                return None
+        
         try:
             async with httpx.AsyncClient(timeout=MCP_TIMEOUT) as client:
                 response = await client.post(
                     self.server_url,
+                    headers=self._get_headers(),
                     json={
                         "jsonrpc": "2.0",
                         "method": "tools/call",
@@ -60,16 +133,8 @@ class MCPClient:
     async def is_available(self) -> bool:
         """检查MCP服务是否可用"""
         try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.post(
-                    self.server_url,
-                    json={
-                        "jsonrpc": "2.0",
-                        "method": "tools/list",
-                        "id": 0
-                    }
-                )
-                return response.status_code == 200
+            # 尝试初始化会话
+            return await self._initialize_session()
         except:
             return False
 

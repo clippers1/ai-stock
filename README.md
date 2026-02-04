@@ -55,24 +55,42 @@ git clone https://github.com/your-username/ai-stock.git
 cd ai-stock
 ```
 
-**2. 启动后端**
+**2. 一键启动（推荐）**
+```powershell
+# Windows PowerShell
+.\start-dev.ps1
+
+# 一键停止所有服务
+.\stop-dev.ps1
+```
+
+> 💡 脚本会自动启动后端、前端和MCP服务，并在3秒后自动打开浏览器
+
+**3. 手动启动（可选）**
+
+<details>
+<summary>点击展开手动启动步骤</summary>
+
+**启动后端**
 ```bash
 cd backend
 uv sync
 uv run uvicorn main:app --reload --port 8000
 ```
 
-**3. 启动前端**
+**启动前端**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-**4. (可选) 启动MCP数据服务**
+**(可选) 启动MCP数据服务**
 ```bash
 uvx akshare-one-mcp --streamable-http --port 8081
 ```
+
+</details>
 
 访问 http://localhost:5173 即可使用。
 

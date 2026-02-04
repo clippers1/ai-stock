@@ -63,3 +63,18 @@
 .nav-item:active {
     transform: scale(0.95);
 }
+
+/* ===== 亮色主题适配 ===== */
+[data-theme="light"] .bottom-nav {
+    background: var(--color-background);
+    border-top-color: var(--color-border);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .bottom-nav::before {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="light"] .nav-item.active svg {
+    filter: drop-shadow(0 0 6px rgba(217, 119, 6, 0.3));
+}

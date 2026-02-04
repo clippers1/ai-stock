@@ -17,6 +17,7 @@ from services.stock_data import (
     mcp_client,
     HOT_A_SHARES
 )
+from services.ai_analyzer import openai_analyzer
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -150,31 +151,36 @@ async def root():
     }
 
 
-@app.get("/api/recommendations", response_model=List[Stock])
-async def get_recommendations():
-    """获取AI推荐股票列表"""
-    stocks = []
+@app.get("/api/recommendations")
+async def get_recommendations(category: str = "shortterm"):
+    """
+    获取AI推荐股票列表
     
-    for symbol in HOT_A_SHARES[:8]:  # 取前8只热门股票
-        # 获取基础数据
-        data = await get_stock_with_fallback(symbol)
-        
-        # 获取AI推荐
-        recommendation = await ai_analyzer.get_recommendation(symbol)
-        
-        stocks.append(Stock(
-            symbol=symbol,
-            name=data["name"],
-            price=data["price"],
-            change=data["change"],
-            change_percent=data["change_percent"],
-            recommendation=recommendation.get("recommendation", "持有"),
-            ai_score=recommendation.get("total_score", 50)
-        ))
+    Args:
+        category: 推荐分类
+            - shortterm: 短线强势（涨停池+技术突破）
+            - trend: 趋势动量（均线多头+放量）
+            - value: 价值低估（超跌反弹机会）
+    """
+    # 使用OpenAI分析器获取智能推荐
+    stocks = await openai_analyzer.analyze_stocks(category)
     
-    # 按AI评分排序
-    stocks.sort(key=lambda x: x.ai_score, reverse=True)
-    return stocks
+    # 转换为响应格式
+    result = []
+    for stock in stocks:
+        result.append({
+            "symbol": stock.get("symbol", ""),
+            "name": stock.get("name", ""),
+            "price": stock.get("price", 0),
+            "change": stock.get("change", 0),
+            "change_percent": stock.get("change_percent", 0),
+            "recommendation": stock.get("recommendation", "持有"),
+            "ai_score": stock.get("ai_score", 50),
+            "signal": stock.get("signal", ""),
+            "reason": stock.get("reason", "")
+        })
+    
+    return result
 
 
 @app.get("/api/stock/{symbol}", response_model=StockDetail)
@@ -374,6 +380,134 @@ async def health_check():
         "api": "healthy",
         "mcp_connection": "connected" if mcp_available else "disconnected",
         "timestamp": datetime.now().isoformat()
+    }
+
+
+@app.get("/api/backtest/summary")
+async def get_backtest_summary(period: str = "30d"):
+    """
+    获取回测汇总统计
+    
+    Args:
+        period: 统计周期 (7d/30d/90d/all)
+    """
+    # 模拟数据 - 实际应从数据库获取
+    summaries = {
+        "7d": {"total_return": 12.5, "win_rate": 68, "total_recommendations": 15, "period": "7d"},
+        "30d": {"total_return": 28.3, "win_rate": 72, "total_recommendations": 48, "period": "30d"},
+        "90d": {"total_return": 45.8, "win_rate": 65, "total_recommendations": 156, "period": "90d"},
+        "all": {"total_return": 85.2, "win_rate": 70, "total_recommendations": 320, "period": "all"},
+    }
+    return summaries.get(period, summaries["30d"])
+
+
+@app.get("/api/backtest/records")
+async def get_backtest_records(period: str = "30d", page: int = 1, page_size: int = 20):
+    """
+    获取回测记录列表
+    
+    Args:
+        period: 统计周期 (7d/30d/90d/all)
+        page: 页码
+        page_size: 每页数量
+    """
+    # 模拟回测记录数据
+    mock_records = [
+        {
+            "id": 1,
+            "symbol": "600519",
+            "name": "贵州茅台",
+            "recommendation_type": "shortterm",
+            "recommendation_label": "突破",
+            "recommendation_date": "2026-01-28",
+            "entry_price": 1680.50,
+            "current_price": 1725.00,
+            "profit_percent": 2.65,
+            "status": "profit",
+            "ai_score": 92,
+            "signal": "放量突破"
+        },
+        {
+            "id": 2,
+            "symbol": "300750",
+            "name": "宁德时代",
+            "recommendation_type": "trend",
+            "recommendation_label": "买入",
+            "recommendation_date": "2026-01-25",
+            "entry_price": 188.20,
+            "current_price": 195.60,
+            "profit_percent": 3.93,
+            "status": "profit",
+            "ai_score": 91,
+            "signal": "均线多头"
+        },
+        {
+            "id": 3,
+            "symbol": "002594",
+            "name": "比亚迪",
+            "recommendation_type": "trend",
+            "recommendation_label": "买入",
+            "recommendation_date": "2026-01-22",
+            "entry_price": 255.00,
+            "current_price": 268.50,
+            "profit_percent": 5.29,
+            "status": "profit",
+            "ai_score": 89,
+            "signal": "放量上攻"
+        },
+        {
+            "id": 4,
+            "symbol": "601166",
+            "name": "兴业银行",
+            "recommendation_type": "value",
+            "recommendation_label": "超跌",
+            "recommendation_date": "2026-01-20",
+            "entry_price": 15.80,
+            "current_price": 16.25,
+            "profit_percent": 2.85,
+            "status": "profit",
+            "ai_score": 82,
+            "signal": "PE仅4.2倍"
+        },
+        {
+            "id": 5,
+            "symbol": "600276",
+            "name": "恒瑞医药",
+            "recommendation_type": "value",
+            "recommendation_label": "超跌",
+            "recommendation_date": "2026-01-18",
+            "entry_price": 40.50,
+            "current_price": 38.90,
+            "profit_percent": -3.95,
+            "status": "loss",
+            "ai_score": 80,
+            "signal": "跌幅超40%"
+        },
+        {
+            "id": 6,
+            "symbol": "000001",
+            "name": "平安银行",
+            "recommendation_type": "shortterm",
+            "recommendation_label": "强势",
+            "recommendation_date": "2026-01-15",
+            "entry_price": 11.50,
+            "current_price": 12.85,
+            "profit_percent": 11.74,
+            "status": "profit",
+            "ai_score": 95,
+            "signal": "涨停"
+        },
+    ]
+    
+    # 简单分页
+    start = (page - 1) * page_size
+    end = start + page_size
+    
+    return {
+        "records": mock_records[start:end],
+        "total": len(mock_records),
+        "page": page,
+        "page_size": page_size
     }
 
 
