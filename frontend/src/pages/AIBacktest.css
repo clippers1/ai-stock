@@ -363,3 +363,213 @@
         transform: rotate(360deg);
     }
 }
+
+/* 额外统计信息 */
+.summary-extra {
+    display: flex;
+    justify-content: space-around;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.extra-item {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.extra-item strong {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+/* 筛选区域优化 */
+.filter-row {
+    margin-bottom: var(--space-sm);
+}
+
+.status-filters {
+    display: flex;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+}
+
+.status-tab {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: var(--color-background-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.status-tab:hover {
+    color: var(--color-text);
+    border-color: var(--color-primary);
+}
+
+.status-tab.active {
+    color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--color-primary);
+}
+
+/* 记录卡片优化 */
+.record-card.closed {
+    opacity: 0.8;
+}
+
+.status-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    margin-left: var(--space-xs);
+}
+
+.status-badge.closed {
+    background: rgba(156, 163, 175, 0.2);
+    color: var(--color-text-muted);
+}
+
+/* 记录元数据优化 */
+.record-meta .meta-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.category-label {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+    border-radius: var(--radius-sm);
+}
+
+/* 持有天数 */
+.holding-days {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-left: auto;
+}
+
+/* 操作区域 */
+.record-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.record-actions .mini-chart {
+    flex: 1;
+    margin-top: 0;
+}
+
+/* 平仓按钮 */
+.close-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+}
+
+.close-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 负收益率样式 */
+.summary-value.negative {
+    color: var(--color-danger);
+}
+
+/* 收益曲线图区域 */
+.chart-section {
+    margin-bottom: var(--space-lg);
+    background: var(--color-background-elevated);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+}
+
+.chart-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.chart-toggle {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.chart-toggle:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.performance-chart {
+    position: relative;
+}
+
+.chart-svg {
+    width: 100%;
+    height: 120px;
+    overflow: visible;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-xs);
+    padding: 0 var(--space-xs);
+}
+
+.chart-label-start,
+.chart-label-end {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+}
+
+.chart-label-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.chart-label-value.positive {
+    color: var(--color-success);
+}
+
+.chart-label-value.negative {
+    color: var(--color-danger);
+}

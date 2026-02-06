@@ -73,6 +73,31 @@ export async function getSectors() {
   }
 }
 
+/**
+ * 获取股票实时行情（用于自选股）
+ * @param {string} symbol - 股票代码
+ */
+export async function getStockQuote(symbol) {
+  try {
+    const response = await fetch(`${API_BASE}/stock/${symbol}`);
+    if (!response.ok) throw new Error('获取行情失败');
+    const data = await response.json();
+    return {
+      price: data.price || 0,
+      change: data.change || 0,
+      change_percent: data.change_percent || 0,
+    };
+  } catch (error) {
+    console.error('API Error:', error);
+    // 返回模拟数据
+    return {
+      price: 100 + Math.random() * 50,
+      change: (Math.random() - 0.5) * 10,
+      change_percent: (Math.random() - 0.5) * 5,
+    };
+  }
+}
+
 
 // ==================== 模拟数据（后备） ====================
 
@@ -190,15 +215,43 @@ function getMockSectors() {
 /**
  * 获取回测记录列表
  * @param {string} timeFilter - 时间筛选: 7d, 30d, 90d, all
+ * @param {string|null} status - 状态筛选: active, closed, 或 null(全部)
  */
-export async function getBacktestRecords(timeFilter = '30d') {
+export async function getBacktestRecords(timeFilter = '30d', status = null) {
   try {
-    const response = await fetch(`${API_BASE}/backtest/records?period=${timeFilter}`);
+    let url = `${API_BASE}/backtest/records?period=${timeFilter}`;
+    if (status) {
+      url += `&status=${status}`;
+    }
+    const response = await fetch(url);
     if (!response.ok) throw new Error('获取回测记录失败');
     return await response.json();
   } catch (error) {
     console.error('API Error:', error);
     return getMockBacktestRecords(timeFilter);
+  }
+}
+
+/**
+ * 平仓操作
+ * @param {number} recordId - 记录ID
+ * @param {number|null} closePrice - 平仓价格（可选）
+ */
+export async function closePosition(recordId, closePrice = null) {
+  try {
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    };
+    if (closePrice !== null) {
+      options.body = JSON.stringify({ close_price: closePrice });
+    }
+    const response = await fetch(`${API_BASE}/backtest/close/${recordId}`, options);
+    if (!response.ok) throw new Error('平仓操作失败');
+    return await response.json();
+  } catch (error) {
+    console.error('API Error:', error);
+    return { success: false, message: error.message };
   }
 }
 
@@ -214,6 +267,28 @@ export async function getBacktestSummary(timeFilter = '30d') {
   } catch (error) {
     console.error('API Error:', error);
     return getMockBacktestSummary(timeFilter);
+  }
+}
+
+/**
+ * 获取收益曲线数据
+ * @param {string} timeFilter - 时间筛选: 7d, 30d, 90d, all
+ */
+export async function getPerformanceCurve(timeFilter = '30d') {
+  try {
+    const response = await fetch(`${API_BASE}/backtest/performance?period=${timeFilter}`);
+    if (!response.ok) throw new Error('获取收益曲线失败');
+    return await response.json();
+  } catch (error) {
+    console.error('API Error:', error);
+    // 返回空数据
+    return {
+      dates: [],
+      daily_returns: [],
+      cumulative_returns: [],
+      daily_count: [],
+      period: timeFilter
+    };
   }
 }
 

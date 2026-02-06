@@ -6,6 +6,7 @@
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getRecommendationsByCategory, getSectors } from '../services/api';
+import { toggleFavorite, isFavorite } from '../services/favorites';
 import ThemeToggle from '../components/ThemeToggle';
 import './Recommendations.css';
 
@@ -111,6 +112,12 @@ const SparklesIcon = () => (
     </svg>
 );
 
+const StarIcon = ({ filled }) => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+);
+
 // 骨架屏组件
 const SkeletonCard = () => (
     <div className="stock-card skeleton">
@@ -128,10 +135,45 @@ export default function Recommendations({ onSelectStock }) {
     const [initialLoading, setInitialLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [cacheInfo, setCacheInfo] = useState(null);
+    const [favoriteSymbols, setFavoriteSymbols] = useState(new Set());
 
     // 使用ref防止StrictMode下重复请求
     const initRef = useRef(false);
     const fetchingRef = useRef(new Set());
+
+    // 更新收藏状态
+    const updateFavoriteStatus = useCallback(() => {
+        const favSet = new Set();
+        stocks.forEach(stock => {
+            if (isFavorite(stock.symbol)) {
+                favSet.add(stock.symbol);
+            }
+        });
+        setFavoriteSymbols(favSet);
+    }, [stocks]);
+
+    // 监听收藏变化
+    useEffect(() => {
+        updateFavoriteStatus();
+        const handleFavoritesChanged = () => updateFavoriteStatus();
+        window.addEventListener('favoritesChanged', handleFavoritesChanged);
+        return () => window.removeEventListener('favoritesChanged', handleFavoritesChanged);
+    }, [updateFavoriteStatus]);
+
+    // 处理收藏切换
+    const handleToggleFavorite = (e, stock) => {
+        e.stopPropagation();
+        const nowFavorite = toggleFavorite({ symbol: stock.symbol, name: stock.name });
+        setFavoriteSymbols(prev => {
+            const next = new Set(prev);
+            if (nowFavorite) {
+                next.add(stock.symbol);
+            } else {
+                next.delete(stock.symbol);
+            }
+            return next;
+        });
+    };
 
     // 获取推荐数据（stale-while-revalidate模式）
     const fetchRecommendations = useCallback(async (category, forceRefresh = false) => {
@@ -316,6 +358,7 @@ export default function Recommendations({ onSelectStock }) {
                             stocks.map((stock) => {
                                 const isPositive = stock.change >= 0;
                                 const label = getRecommendationLabel(stock.recommendation);
+                                const isFav = favoriteSymbols.has(stock.symbol);
                                 return (
                                     <button
                                         key={stock.symbol}
@@ -334,6 +377,13 @@ export default function Recommendations({ onSelectStock }) {
                                                     {isPositive ? '+' : ''}{stock.change_percent.toFixed(2)}%
                                                 </span>
                                             </div>
+                                            <span
+                                                className={`favorite-btn ${isFav ? 'active' : ''}`}
+                                                onClick={(e) => handleToggleFavorite(e, stock)}
+                                                title={isFav ? '取消收藏' : '添加收藏'}
+                                            >
+                                                <StarIcon filled={isFav} />
+                                            </span>
                                         </div>
                                         <div className="stock-meta">
                                             <div className="stock-meta-row">

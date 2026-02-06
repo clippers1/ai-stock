@@ -6,6 +6,7 @@ import Recommendations from './pages/Recommendations';
 import StockAnalysis from './pages/StockAnalysis';
 import AIChat from './pages/AIChat';
 import AIBacktest from './pages/AIBacktest';
+import Favorites from './pages/Favorites';
 import BottomNav from './components/BottomNav';
 import './App.css';
 
@@ -29,6 +30,8 @@ export default function App() {
     switch (currentPage) {
       case 'recommendations':
         return <Recommendations onSelectStock={handleSelectStock} />;
+      case 'favorites':
+        return <Favorites onSelectStock={handleSelectStock} />;
       case 'backtest':
         return <AIBacktest onSelectStock={handleSelectStock} />;
       case 'analysis':

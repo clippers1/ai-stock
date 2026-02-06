@@ -2,6 +2,7 @@
  * AI对话页面 - 与AI助手交互
  */
 import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { sendChatMessage } from '../services/api';
 import './AIChat.css';
 
@@ -40,13 +41,28 @@ const UserIcon = () => (
 );
 
 export default function AIChat() {
-    const [messages, setMessages] = useState([
+    // 默认欢迎消息
+    const defaultMessages = [
         {
             role: 'assistant',
             content: '您好！我是您的AI投资助手。我可以帮您分析股票、推荐投资机会、解答投资疑问。请问有什么可以帮您的？',
             timestamp: new Date().toISOString()
         }
-    ]);
+    ];
+
+    // 从localStorage恢复聊天记录
+    const [messages, setMessages] = useState(() => {
+        try {
+            const saved = localStorage.getItem('ai_chat_messages');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                return parsed.length > 0 ? parsed : defaultMessages;
+            }
+        } catch (e) {
+            console.error('Failed to load chat history:', e);
+        }
+        return defaultMessages;
+    });
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [suggestions, setSuggestions] = useState([
@@ -56,6 +72,17 @@ export default function AIChat() {
     ]);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
+
+    // 保存聊天记录到localStorage
+    useEffect(() => {
+        try {
+            // 只保留最近50条消息
+            const toSave = messages.slice(-50);
+            localStorage.setItem('ai_chat_messages', JSON.stringify(toSave));
+        } catch (e) {
+            console.error('Failed to save chat history:', e);
+        }
+    }, [messages]);
 
     // 自动滚动到底部
     useEffect(() => {
@@ -142,7 +169,9 @@ export default function AIChat() {
                                 {msg.role === 'user' ? <UserIcon /> : <BotIcon />}
                             </div>
                             <div className="message-content">
-                                <p>{msg.content}</p>
+                                <div className="markdown-content">
+                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                </div>
                                 <span className="message-time">{formatTime(msg.timestamp)}</span>
                             </div>
                         </div>

@@ -114,6 +114,79 @@
     margin: 0;
 }
 
+/* Markdown内容样式 */
+.markdown-content {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
+.markdown-content p {
+    margin: 0 0 0.5em 0;
+}
+
+.markdown-content p:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    font-weight: 600;
+    margin: 0.8em 0 0.4em 0;
+    color: var(--color-text);
+}
+
+.markdown-content h1 {
+    font-size: 1.25rem;
+}
+
+.markdown-content h2 {
+    font-size: 1.1rem;
+}
+
+.markdown-content h3 {
+    font-size: 1rem;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+}
+
+.markdown-content li {
+    margin: 0.25em 0;
+}
+
+.markdown-content strong {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.markdown-content em {
+    font-style: italic;
+    color: var(--color-text-secondary);
+}
+
+.markdown-content code {
+    background: var(--color-background-elevated);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.875em;
+}
+
+.markdown-content a {
+    color: var(--color-cta);
+    text-decoration: underline;
+}
+
+.user-message .markdown-content strong,
+.user-message .markdown-content em,
+.user-message .markdown-content a {
+    color: inherit;
+}
+
 .message-time {
     display: block;
     font-size: 0.6875rem;

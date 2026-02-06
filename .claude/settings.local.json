@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__augment-context-engine__codebase-retrieval"
+    ]
+  }
+}

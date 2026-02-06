@@ -11,7 +11,7 @@
 - 📊 **AI推荐** - 基于技术面+基本面综合评分的智能选股
 - 📈 **股票分析** - K线图、技术指标、AI分析观点
 - 💬 **AI对话** - 智能问答，支持个股分析查询
-- 🔄 **实时数据** - 通过akshare-one-mcp获取A股实时行情
+- 🔄 **实时数据** - 通过akshare-one获取A股实时行情
 
 ## 🛠️ 技术栈
 
@@ -19,7 +19,7 @@
 |------|------|
 | 前端 | React + Vite + CSS |
 | 后端 | FastAPI + Python |
-| 数据 | akshare-one-mcp (A股MCP服务) |
+| 数据 | akshare-one (A股数据库) |
 
 ## 📦 项目结构
 
@@ -34,7 +34,7 @@ ai-stock/
 ├── backend/           # Python后端服务
 │   ├── main.py            # API入口
 │   ├── services/          # 业务服务
-│   │   └── stock_data.py  # MCP数据服务
+│   │   └── akshare_service.py  # 股票数据服务
 │   └── pyproject.toml
 └── README.md
 ```
@@ -64,7 +64,7 @@ cd ai-stock
 .\stop-dev.ps1
 ```
 
-> 💡 脚本会自动启动后端、前端和MCP服务，并在3秒后自动打开浏览器
+> 💡 脚本会自动启动后端和前端服务，并在3秒后自动打开浏览器
 
 **3. 手动启动（可选）**
 
@@ -85,11 +85,6 @@ npm install
 npm run dev
 ```
 
-**(可选) 启动MCP数据服务**
-```bash
-uvx akshare-one-mcp --streamable-http --port 8081
-```
-
 </details>
 
 访问 http://localhost:5173 即可使用。
@@ -105,10 +100,8 @@ uvx akshare-one-mcp --streamable-http --port 8081
 ### 后端API端口
 默认运行在 `http://localhost:8000`
 
-### MCP数据服务
-默认连接 `http://localhost:8081/mcp`
-
-> 💡 即使不启动MCP服务，应用也能正常运行（使用内置模拟数据）
+### 数据来源
+使用 akshare-one 库直接获取A股实时数据，无需额外启动服务。
 
 ## 📝 API文档
 

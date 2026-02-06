@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 # 导入数据服务
 from .akshare_service import akshare_service
+from .quant_service import quant_service
 
 # 加载环境变量
 load_dotenv()
@@ -243,11 +244,37 @@ class OpenAIStockAnalyzer:
             
             # 构建提示词
             system_prompt = AGENT_PROMPTS.get(category, AGENT_PROMPTS["shortterm"])
+            
+            # 尝试获取技术指标（前5只股票）
+            tech_indicators = {}
+            try:
+                symbols = [s["symbol"] for s in stock_pool[:5] if "symbol" in s]
+                if symbols:
+                    print(f"[AI分析] 📊 获取技术指标: {symbols}")
+                    tech_indicators = await quant_service.batch_analyze(symbols, max_count=5)
+            except Exception as e:
+                print(f"[AI分析] ⚠️ 技术指标获取失败: {e}")
+            
+            # 构建user_prompt
+            stock_data_str = json.dumps(stock_pool, ensure_ascii=False, indent=2)
+            tech_data_str = ""
+            if tech_indicators:
+                tech_data_str = f"""\n
+技术指标分析（部分股票）:
+{json.dumps(tech_indicators, ensure_ascii=False, indent=2)}
+
+指标说明:
+- RSI < 30: 超卖, RSI > 70: 超买
+- MACD金叉: 看多信号, MACD死叉: 看空信号
+- 均线多头排列: 强势上涨趋势
+- 放量: 成交量超过5日均量2倍以上
+"""
+            
             user_prompt = f"""请分析以下A股股票，给出{self._get_category_name(category)}推荐：
 
 股票池：
-{json.dumps(stock_pool, ensure_ascii=False, indent=2)}
-
+{stock_data_str}
+{tech_data_str}
 当前时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}
 
 请基于你的专业分析，从中选出5-6只符合策略的股票进行推荐。
